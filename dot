@@ -1,0 +1,19 @@
+#!/bin/bash
+
+
+DOT_DIR="$HOME/.config/dot"
+DOT_FILE="$DOT_DIR/dotfile"
+
+if [ -f $DOT_FILE ]; then
+    while IFS= read -r line
+    do
+        mkdir -p "$DOT_DIR"
+        echo "COPYING $line"
+        line_array=($line)
+        cp ""${line_array[0]}"" ""${line_array[1]}""
+        echo "DONE"
+    done < "$DOT_FILE"
+else
+    echo "File $DOT_FILE does not exist."
+fi
+

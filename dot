@@ -4,13 +4,22 @@ DOT_DIR="$HOME/.config/dot"
 DOT_FILE="$DOT_DIR/dotfile"
 
 if [ -f $DOT_FILE ]; then
+    mkdir -p "$DOT_DIR"
+    cd "$DOT_DIR"
     while IFS= read -r line
     do
-        mkdir -p "$DOT_DIR"
-        echo "COPYING $line"
         line_array=($line)
-        cp ""${line_array[0]}"" ""${line_array[1]}""
-        echo "DONE"
+	from_file=$(eval echo ${line_array[0]})
+	to_file=$(eval echo ${line_array[1]})
+        new_to_file="$DOT_DIR/$to_file"
+
+        if [ -f $from_file ]; then
+            mkdir -p "${new_to_file}"
+            echo "Copying ${from_file} to ${new_to_file}"
+	    cp ${from_file} ${new_to_file}
+        else
+            echo "ERROR: ${from_file} not found. Skipping"
+        fi
     done < "$DOT_FILE"
 else
     echo "File $DOT_FILE does not exist."

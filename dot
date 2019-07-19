@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 DOT_DIR="$HOME/.config/dot"
 DOT_FILE="$DOT_DIR/dotfile"
 

@@ -3,25 +3,50 @@
 DOT_DIR="$HOME/.config/dot"
 DOT_FILE="$DOT_DIR/dotfile"
 
-if [ -f $DOT_FILE ]; then
+if [[ $1 == "-r" ]]; then
     mkdir -p "$DOT_DIR"
     cd "$DOT_DIR"
     while IFS= read -r line
     do
         line_array=($line)
-	from_file=$(eval echo ${line_array[0]})
-	to_file=$(eval echo ${line_array[1]})
-        new_to_file="$DOT_DIR/$to_file"
+        sys_file=$(eval echo ${line_array[0]})
+        rel_repo_dir=$(eval echo ${line_array[1]})
+        abs_repo_dir="$DOT_DIR/$rel_repo_dir"
+        filename=$(basename $sys_file)
+	abs_repo_file="$abs_repo_dir/$filename"
+        sys_dir=$(dirname $sys_file)
 
-        if [ -f $from_file ]; then
-            mkdir -p "${new_to_file}"
-            echo "Copying ${from_file} to ${new_to_file}"
-	    cp ${from_file} ${new_to_file}
+	if [ -f $abs_repo_file ]; then
+            if [ ! -d $sys_dir ]; then
+                echo "Directory ${sys_dir} not found. Creating directory."
+		mkdir -p $sysdir
+            fi
+	    echo "Copying from ${abs_repo_file} to ${sys_dir}"
         else
-            echo "ERROR: ${from_file} not found. Skipping"
+            echo "Error ${abs_repo_file} not found. Skipping."
         fi
     done < "$DOT_FILE"
 else
-    echo "File $DOT_FILE does not exist."
+    if [ -f $DOT_FILE ]; then
+        mkdir -p "$DOT_DIR"
+        cd "$DOT_DIR"
+        while IFS= read -r line
+        do
+            line_array=($line)
+	    sys_file=$(eval echo ${line_array[0]})
+            rel_repo_dir=$(eval echo ${line_array[1]})
+            abs_repo_dir="$DOT_DIR/$rel_repo_dir"
+
+            if [ -f $sys_file ]; then
+                mkdir -p "${abs_repo_dir}"
+                echo "Copying ${sys_file} to ${abs_repo_dir}"
+                cp ${sys_file} ${abs_repo_dir}
+            else
+                echo "ERROR: ${sys_file} not found. Skipping."
+            fi
+        done < "$DOT_FILE"
+    else
+        echo "File $DOT_FILE does not exist."
+    fi
 fi
 

@@ -3,7 +3,7 @@
 DOT_DIR="$HOME/.config/dot"
 DOT_FILE="$DOT_DIR/dotfile"
 
-if [[ $1 == "-r" ]]; then
+if [[ $1 == "reverse" ]]; then
     mkdir -p "$DOT_DIR"
     cd "$DOT_DIR"
     while IFS= read -r line
@@ -22,6 +22,7 @@ if [[ $1 == "-r" ]]; then
 		mkdir -p $sysdir
             fi
 	    echo "Copying from ${abs_repo_file} to ${sys_dir}"
+	    cp ${abs_repo_file} ${sys_dir}
         else
             echo "Error ${abs_repo_file} not found. Skipping."
         fi
